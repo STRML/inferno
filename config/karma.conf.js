@@ -1,4 +1,47 @@
 /* global module */
+/* tslint:disable */
+
+const customLaunchers = {
+	sl_chrome: {
+		base: 'SauceLabs',
+		browserName: 'chrome',
+		platform: 'Windows 10'
+	},
+	sl_firefox: {
+		base: 'SauceLabs',
+		browserName: 'firefox',
+		platform: 'Windows 10'
+	},
+	sl_safari: {
+		base: 'SauceLabs',
+		browserName: 'safari',
+		platform: 'OS X 10.11'
+	},
+	sl_edge: {
+		base: 'SauceLabs',
+		browserName: 'MicrosoftEdge',
+		platform: 'Windows 10'
+	},
+	sl_ie_11: {
+		base: 'SauceLabs',
+		browserName: 'internet explorer',
+		version: '11.103',
+		platform: 'Windows 10'
+	},
+	sl_ie_10: {
+		base: 'SauceLabs',
+		browserName: 'internet explorer',
+		version: '10.0',
+		platform: 'Windows 7'
+	},
+	sl_ie_9: {
+		base: 'SauceLabs',
+		browserName: 'internet explorer',
+		version: '9.0',
+		platform: 'Windows 7'
+	}
+};
+
 module.exports = function (config) {
 	config.set({
 		// base path that will be used to resolve all patterns (eg. files, exclude)
@@ -7,7 +50,7 @@ module.exports = function (config) {
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
 		frameworks: [
 			'chai',
-			'mocha'
+			'mocha',
 		],
 		files: [
 			'./../node_modules/babel-polyfill/dist/polyfill.js',
@@ -15,7 +58,7 @@ module.exports = function (config) {
 			'./../src/**/*__tests__*/**/*.ts',
 			'./../src/**/*__tests__*/**/*.tsx',
 			'./../src/**/*__tests__*/**/*.js',
-			'./../src/**/*__tests__*/**/*.jsx'
+			'./../src/**/*__tests__*/**/*.jsx',
 		],
 		// Start these browsers, currently available:
 		// - Chrome
@@ -29,8 +72,8 @@ module.exports = function (config) {
 		customLaunchers: {
 			Chrome_travis_ci: {
 				base: 'Chrome',
-				flags: ['--no-sandbox']
-			}
+				flags: ['--no-sandbox'],
+			},
 		},
 		// list of files to exclude
 		exclude: [],
@@ -38,7 +81,7 @@ module.exports = function (config) {
 			'./../src/**/*__tests__*/**/*.ts': ['webpack'],
 			'./../src/**/*__tests__*/**/*.tsx': ['webpack'],
 			'./../src/**/*__tests__*/**/*.js': ['webpack'],
-			'./../src/**/*__tests__*/**/*.jsx': ['webpack']
+			'./../src/**/*__tests__*/**/*.jsx': ['webpack'],
 		},
 		webpack: {
 			module: {
@@ -46,17 +89,17 @@ module.exports = function (config) {
 					{
 						test: /\.tsx?$/,
 						loaders: ['babel-loader', 'ts-loader'],
-						exclude: /node_modules/
+						exclude: /node_modules/,
 					}, {
 						test: /\.jsx?$/,
 						loader: 'babel-loader',
-						exclude: /node_modules/
-					}
-				]
+						exclude: /node_modules/,
+					},
+				],
 			},
 			resolve: {
-				extensions: ['.js', '.jsx', '.ts', '.tsx']
-			}
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
+			},
 		},
 		webpackMiddleware: {
 			noInfo: true,
@@ -88,8 +131,8 @@ module.exports = function (config) {
 				// Add the origins of chunks and chunk merging info
 				chunkOrigins: false,
 				// Add messages from child loaders
-				children: false
-			}
+				children: false,
+			},
 		},
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
@@ -112,7 +155,7 @@ module.exports = function (config) {
 		autoWatch: false,
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits
-		singleRun: true
+		singleRun: true,
 	});
 
 	if (process.env.TRAVIS) {
@@ -120,5 +163,24 @@ module.exports = function (config) {
 		// Used by Travis to push coveralls info corretly to example coveralls.io
 		// Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
 		config.browserNoActivityTimeout = 120000;
+	}
+
+	if (process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST) {
+		if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
+			console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.')
+			process.exit(1)
+		}
+		
+		config.set({
+			sauceLabs: {
+        testName: 'Inferno Tests',
+			},
+			customLaunchers: customLaunchers,
+			browsers: Object.keys(customLaunchers),
+			reporters: [
+				'dots',
+				'saucelabs',
+			],
+		});
 	}
 };
