@@ -137,7 +137,9 @@ module.exports = function (config) {
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-		reporters: ['progress'],
+		reporters: [
+			'progress'
+		],
 
 		browserDisconnectTimeout: 10000,
 		browserDisconnectTolerance: 2,
@@ -166,6 +168,7 @@ module.exports = function (config) {
 	}
 
 	console.log(process.env.TRAVIS, process.env.TRAVIS_PULL_REQUEST);
+	console.log(process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST);
 	if (process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST) {
 		console.log("Running with Sauce Labs");
 		if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
@@ -181,7 +184,7 @@ module.exports = function (config) {
 			customLaunchers: customLaunchers,
 			browsers: Object.keys(customLaunchers),
 			reporters: [
-				'dots',
+				'progress',
 				'saucelabs',
 			],
 		});
