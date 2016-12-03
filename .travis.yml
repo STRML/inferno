@@ -1,44 +1,29 @@
 language: node_js
-
 node_js:
-  - '6'
-
+- '6'
 notifications:
   email: true
-
-# Use container-based Travis infrastructure.
 sudo: required
 dist: trusty
-
 env:
+  matrix:
   - CXX=g++-4.8
 addons:
   sauce_connect:
-    username: "LukeSheard"
+    username: LukeSheard
   jwt:
-    secure: "vMe106qClaAE01vR5KzCF+DscferV31HvK/dEMpz5lWPcdKNtGrrgAS7W+Qewm3rDu7wEWowWewQF6P1cg11mYdkl4R9AY2LVXVcXZiyaTL3vS4s/m7Ez1cxWhWtlhzmt+zKGMktF3dUZ20HElOCuNPJljik08s2evmYQv+T1tKyTnow50OvXyqje40l4oYbJBHOOrTUUb4YT1YnXWgJVi8KJOofl5R+Y/rEMJrB9kIVzPakEqcsxjzTcEUu2vFEUslUP1xwmSV8mIOLtabnKldf7vsXQrPCV88d7HvRFFUA92x40VM/tZ3uEh1do54+gVUluAfZcYIcH0uuRsT3Ke6ZggPyTTVqmEU0lx/25vnWYL1XRvrhOktB8ggdp0qJ3jgU3jmP2ffzM/GFoYynzV7MZes42hALHcLQ20+PaC3xBEisH0T8xh/wJzFGyo9DSjNwwTt/IwfYKPDjk35iaGXUKQXVYjdv42M7QG0HpFzU2ivId1jV5vTK2uliwl/Dkp9kiAZruioHufseIPYGV1VOBiEKbKu6UYB8yUIiN0QcP8SMA6tXbUNHdfPYokMqSkUNymCUgPxZyFCjmOTqimwN3cQ+ULEII+mm0oc6mUJFlg6pf8VQPGoUjSHvs0IvRxEdOKCAGIX1kuBZwm48fBvA+r+76jkrUv1itVxP0Rg="
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-
-addons:
+    secure: u9fmU1Ded0ghOPqUBghjacxGTUI5w/4gA2pbTFj4acw3tvtCTvWR+VcBheLa+M7lKUlbYmttxh3VqFemTRu/RXoOXT+OUy8d4dAG1Dd53NuRAyCiP96oTOImKfOz6QW6TcA7IRo4+zqb/0S52g0rS9NM85WtG8D2W+RSo6V8qJdueswQRNYnKNCeBSZKvU3Ge3ViuUiBv3b8ULLM841ZflBA+3PkHxJMl1ziwYmJ7R5IB0wtcsLIdI9kW2hSJIyAwVbZqS3UVpIQPhW4kJibXaaFoHqemtzlPiGZ+PdiEkVUUvIaImpb9sTqQHTFjmOP60FntX5ANS3RnLtimUNmx48Y7FyYbNVHylqgq47qXGLuU742vdWA+4OkoqolWsQVMkY47uQ8+3dCxtfDhtOGNTyCNFpC8lr9fOp+SCx4Dcssn7UiQD3hg4C3TQYOldPP9SevzqkKk1JD6A5fg9iTgbDJ25iM/B7PHsYNKT1vSAQVrku8sQuZz9lPWxzZ2/vg+8fpHoF/JYk/HoYjZweZAt1WL7SHeAEDa1IKoQSESjVJeLhJ4noY5if3ueoFU1vj0yXrOjgnyvnZ3nT0Voth164Ldet87gVPuQg+uZYguiHB/Hu71YRkKjpIUX1xxPRBWqnifEOZBY1QsmnuoKKBDgyU1q8F4K1xTR3H/M4zMf0=
   at:
     sources:
-      - google-chrome
+    - google-chrome
     packages:
-      - google-chrome-stable
-      - google-chrome-beta
-
+    - google-chrome-stable
+    - google-chrome-beta
 before_install:
-  - "nvm use $TRAVIS_NODE_VERSION"
-  # Repo for newer Node.js versions
-  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-
+- nvm use $TRAVIS_NODE_VERSION
+- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 after_script:
-  - npm run server:cov:publish
+- npm run server:cov:publish
