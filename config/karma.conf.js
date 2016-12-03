@@ -160,16 +160,16 @@ module.exports = function (config) {
 		singleRun: true,
 	});
 
-	if (process.env.TRAVIS) {
+	const travisToBool = (variable) => String(variable).match('true');
+
+	if (travisToBool(process.env.TRAVIS)) {
 		config.browsers = ['Chrome_travis_ci'];
 		// Used by Travis to push coveralls info corretly to example coveralls.io
 		// Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
 		config.browserNoActivityTimeout = 120000;
 	}
 
-	console.log(process.env.TRAVIS, process.env.TRAVIS_PULL_REQUEST);
-	console.log(process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST);
-	if (process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST) {
+	if (travisToBool(process.env.TRAVIS) && !travisToBool(process.env.TRAVIS_PULL_REQUEST)) {
 		console.log("Running with Sauce Labs");
 		if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
 			console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.')
