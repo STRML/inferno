@@ -165,6 +165,7 @@ module.exports = function (config) {
 		config.browserNoActivityTimeout = 120000;
 	}
 
+	console.log(process.env.TRAVIS, process.env.TRAVIS_PULL_REQUEST);
 	if (process.env.TRAVIS && !process.env.TRAVIS_PULL_REQUEST) {
 		console.log("Running with Sauce Labs");
 		if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
@@ -173,6 +174,7 @@ module.exports = function (config) {
 		}
 		
 		config.set({
+			port: 9876,
 			sauceLabs: {
         testName: 'Inferno Tests',
 			},
